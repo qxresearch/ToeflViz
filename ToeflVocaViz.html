@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Quiz</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(-70deg, #202020, #000000);
+            font-family: 'Space Mono', monospace;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 420px;
+            max-height: 80vh; /* Adjust the maximum height of the container */
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            color: white;
+            text-align: center;
+            overflow: auto; /* Allows scrolling if content overflows */
+            z-index: 1;
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 300;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #ecf0f1;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .randomize-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .randomize-container input[type="checkbox"] {
+            margin-right: 10px; /* Space between checkbox and text */
+        }
+
+        .randomize-container span {
+            font-size: 18px;
+            color: #ffffff;
+        }
+
+        #word, #meaning {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        #word {
+            font-size: 2em;
+        }
+
+        #meaning {
+            font-size: 1.5em;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        button:disabled:hover {
+            background-color: #95a5a6;
+            transform: none;
+        }
+
+        /* Glass Effect Background Circles */
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(120deg, #1D976C, #2c3e50);
+            opacity: 0.6;
+            z-index: 0;
+        }
+
+        .circle-1 {
+            height: 200px;
+            width: 200px;
+            top: 10%;
+            left: 55%;
+            animation: float 6s infinite alternate;
+        }
+
+        .circle-2 {
+            height: 150px;
+            width: 150px;
+            bottom: 10%;
+            right: 60%;
+            animation: float 6s infinite alternate;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(10px) translateX(5px);
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 90%; /* Adjust the width for smaller screens */
+                max-height: none; /* Remove max-height restriction */
+                height: auto; /* Allow height to adjust based on content */
+            }
+
+            #word, #meaning {
+                font-size: 1.5em; /* Adjust font size for smaller screens */
+            }
+
+            .button-container {
+                display: flex;
+                flex-direction: column; /* Stack buttons vertically */
+                align-items: center;
+            }
+
+            button {
+                width: 100%; /* Make buttons full-width */
+                margin: 10px 0; /* Adjust margin for vertical stacking */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="container">
+        <h1>Vocabulary Quiz</h1>
+        <input type="file" id="fileInput" accept=".txt">
+        <label class="randomize-container">
+            <input type="checkbox" id="randomizeCheckbox">
+            <span>Randomize words</span>
+        </label>
+        <div id="word"></div>
+        <div id="meaning"></div>
+        <div class="button-container">
+            <button id="nextButton" disabled>Next</button>
+            <button id="showMeaningButton" disabled>Show Meaning</button>
+            <button id="stopButton" disabled>Stop</button>
+        </div>
+    </div>
+
+    <script>
+        let wordList = [];
+        let currentIndex = 0;
+
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    wordList = e.target.result.trim().split('\n').map(line => {
+                        const [word, meaning] = line.split(':');
+                        return { word: word.trim(), meaning: meaning.trim() };
+                    });
+                    if (wordList.length === 0) {
+                        alert("No words found in the file.");
+                    } else {
+                        document.getElementById('nextButton').disabled = false;
+                        document.getElementById('showMeaningButton').disabled = false;
+                        document.getElementById('stopButton').disabled = false;
+                        displayNextWord();
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        document.getElementById('randomizeCheckbox').addEventListener('change', function() {
+            if (this.checked && wordList.length > 0) {
+                wordList = shuffleArray(wordList);
+                this.disabled = true; // Disable the checkbox after shuffling
+            }
+        });
+
+        document.getElementById('nextButton').addEventListener('click', displayNextWord);
+
+        document.getElementById('showMeaningButton').addEventListener('click', function() {
+            if (currentIndex > 0) {
+                document.getElementById('meaning').innerText = wordList[currentIndex - 1].meaning;
+            }
+        });
+
+        document.getElementById('stopButton').addEventListener('click', function() {
+            alert("You have stopped the quiz.");
+        });
+
+        function displayNextWord() {
+            if (currentIndex < wordList.length) {
+                document.getElementById('word').innerText = wordList[currentIndex].word;
+                document.getElementById('meaning').innerText = '';
+                currentIndex++;
+            } else {
+                alert("You have reached the end of the list!");
+            }
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+    </script>
+</body>
+</html>
