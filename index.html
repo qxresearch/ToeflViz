@@ -19,6 +19,8 @@
             background-size: cover;
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
         }
 
         .container {
@@ -35,6 +37,8 @@
             text-align: center;
             overflow: auto;
             z-index: 1;
+            opacity: 0;
+            animation: fadeIn 1s 0.5s forwards;
         }
 
         h1 {
@@ -43,6 +47,8 @@
             font-weight: 300;
             color: #ffffff;
             margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeIn 1s 0.5s forwards;
         }
 
         hr {
@@ -61,6 +67,8 @@
             font-size: 14px; /* Reduced size */
             display: block;
             margin: 0 auto;
+            opacity: 0;
+            animation: fadeIn 1s 0.75s forwards;
         }
 
         .randomize-container {
@@ -68,6 +76,8 @@
             align-items: center;
             justify-content: center;
             margin: 15px 0;
+            opacity: 0;
+            animation: fadeIn 1s 1s forwards;
         }
 
         .randomize-container input[type="checkbox"] {
@@ -79,27 +89,36 @@
             color: #b0b0b0; /* Grey text */
         }
 
-        #word {
+        #word, #meaning {
             margin: 15px 0;
             padding: 8px;
             border-radius: 5px;
+            transition: background 0.3s, border 0.3s;
+        }
+
+        #word {
             background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.3);
             font-size: 1.5em; /* Adjusted size */
+            opacity: 0;
+            animation: fadeIn 1s 1.25s forwards;
         }
 
         #meaning {
-            margin: 15px 0;
-            padding: 8px;
-            border-radius: 5px;
             background: rgba(255, 255, 255, 0.1); /* Lighter background */
             border: 1px solid rgba(255, 255, 255, 0.2);
             font-size: 1.2em; /* Smaller font size */
             color: #b0b0b0; /* Grey color */
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            transition: height 0.5s ease, opacity 0.5s ease;
         }
 
         .button-container {
             margin-top: 15px;
+            opacity: 0;
+            animation: fadeIn 1s 1.75s forwards;
         }
 
         button {
@@ -136,6 +155,32 @@
             margin-top: 15px;
             font-size: 12px; /* Reduced size */
             color: #b0b0b0; /* Grey text */
+            opacity: 0;
+            animation: fadeIn 1s 2s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                height: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                height: auto;
+                transform: translateY(0);
+            }
         }
 
         @media (max-width: 768px) {
@@ -229,7 +274,13 @@
 
         document.getElementById('showMeaningButton').addEventListener('click', function() {
             if (currentIndex > 0) {
-                document.getElementById('meaning').innerText = wordList[currentIndex - 1].meaning;
+                const meaningElement = document.getElementById('meaning');
+                meaningElement.innerText = wordList[currentIndex - 1].meaning;
+                meaningElement.style.opacity = '0';
+                meaningElement.style.height = 'auto';
+                meaningElement.offsetHeight; // Trigger reflow
+                meaningElement.style.transition = 'none';
+                meaningElement.style.animation = 'slideDown 0.5s forwards';
                 updateStats(false);
             }
         });
@@ -242,6 +293,11 @@
             if (currentIndex < wordList.length) {
                 document.getElementById('word').innerText = wordList[currentIndex].word;
                 document.getElementById('meaning').innerText = '';
+                document.getElementById('meaning').style.transition = 'none';
+                document.getElementById('meaning').style.opacity = '0';
+                document.getElementById('meaning').style.height = '0';
+                document.getElementById('meaning').offsetHeight; // Trigger reflow
+                document.getElementById('meaning').style.transition = 'height 0.5s ease, opacity 0.5s ease';
                 currentIndex++;
                 updateStats(true);
             } else {
