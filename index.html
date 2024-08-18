@@ -59,6 +59,8 @@
             background: #444444; /* Subtle background */
             color: #b0b0b0; /* Subtle text */
             font-size: 14px; /* Reduced size */
+            display: block;
+            margin: 0 auto;
         }
 
         .randomize-container {
@@ -182,8 +184,8 @@
         </div>
         <hr>
         <div class="footer">
-            <div>Attempted: <span id="attemptedCount">0</span></div>
-            <div>Solved: <span id="correctCount">0</span></div>
+            <div>Attempted : <span id="attemptedCount">0</span></div>
+            <div>Skipped : <span id="correctCount">0</span></div>
         </div>
     </div>
 
@@ -205,6 +207,7 @@
                     if (wordList.length === 0) {
                         alert("No words found in the file.");
                     } else {
+                        document.getElementById('fileInput').style.display = 'none'; // Hide file input
                         document.getElementById('nextButton').disabled = false;
                         document.getElementById('showMeaningButton').disabled = false;
                         document.getElementById('stopButton').disabled = false;
