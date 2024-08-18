@@ -12,18 +12,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 12px;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(-70deg, #202020, #000000);
-            font-family: 'Space Mono', monospace;
+            background: #1b1b1b url('background.jpg') no-repeat center center;
+            background-size: cover;
+            font-family: 'Poppins', sans-serif;
             overflow: hidden;
         }
 
         .container {
             position: relative;
             width: 420px;
-            max-height: 80vh; /* Adjust the maximum height of the container */
-            background: rgba(255, 255, 255, 0.1);
+            max-height: 80vh;
+            background: rgba(33, 33, 33, 0.9); /* Darker ash color */
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 15px;
@@ -31,69 +33,78 @@
             padding: 20px;
             color: white;
             text-align: center;
-            overflow: auto; /* Allows scrolling if content overflows */
+            overflow: auto;
             z-index: 1;
         }
 
         h1 {
             font-family: 'Poppins', sans-serif;
-            font-size: 20px;
+            font-size: 16px; /* Reduced size */
             font-weight: 300;
             color: #ffffff;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.2); /* Subtle grey line */
+            margin-bottom: 10px;
         }
 
         input[type="file"] {
-            margin-bottom: 20px;
-            padding: 10px;
+            margin-bottom: 15px;
+            padding: 8px;
             border: none;
             border-radius: 5px;
-            background: #ecf0f1;
-            color: #2c3e50;
-            font-size: 16px;
+            background: #444444; /* Subtle background */
+            color: #b0b0b0; /* Subtle text */
+            font-size: 14px; /* Reduced size */
         }
 
         .randomize-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .randomize-container input[type="checkbox"] {
-            margin-right: 10px; /* Space between checkbox and text */
+            margin-right: 8px;
         }
 
         .randomize-container span {
-            font-size: 18px;
-            color: #ffffff;
-        }
-
-        #word, #meaning {
-            margin: 20px 0;
-            padding: 10px;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 14px;
+            color: #b0b0b0; /* Grey text */
         }
 
         #word {
-            font-size: 2em;
+            margin: 15px 0;
+            padding: 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 1.5em; /* Adjusted size */
         }
 
         #meaning {
-            font-size: 1.5em;
+            margin: 15px 0;
+            padding: 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1); /* Lighter background */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 1.2em; /* Smaller font size */
+            color: #b0b0b0; /* Grey color */
         }
 
         .button-container {
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         button {
             background-color: #3498db;
             color: white;
-            font-size: 16px;
-            padding: 10px 20px;
+            font-size: 14px; /* Reduced size */
+            padding: 8px 15px;
             margin: 5px;
             border: none;
             border-radius: 5px;
@@ -116,72 +127,47 @@
             transform: none;
         }
 
-        /* Glass Effect Background Circles */
-        .circle {
-            position: absolute;
-            border-radius: 50%;
-            background: linear-gradient(120deg, #1D976C, #2c3e50);
-            opacity: 0.6;
-            z-index: 0;
-        }
-
-        .circle-1 {
-            height: 200px;
-            width: 200px;
-            top: 10%;
-            left: 55%;
-            animation: float 6s infinite alternate;
-        }
-
-        .circle-2 {
-            height: 150px;
-            width: 150px;
-            bottom: 10%;
-            right: 60%;
-            animation: float 6s infinite alternate;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0) translateX(0);
-            }
-            50% {
-                transform: translateY(10px) translateX(5px);
-            }
-            100% {
-                transform: translateY(0) translateX(0);
-            }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            font-size: 12px; /* Reduced size */
+            color: #b0b0b0; /* Grey text */
         }
 
         @media (max-width: 768px) {
             .container {
-                width: 90%; /* Adjust the width for smaller screens */
-                max-height: none; /* Remove max-height restriction */
-                height: auto; /* Allow height to adjust based on content */
+                width: 90%;
+                max-height: none;
+                height: auto;
             }
 
-            #word, #meaning {
-                font-size: 1.5em; /* Adjust font size for smaller screens */
+            #word {
+                font-size: 1.2em;
+            }
+
+            #meaning {
+                font-size: 1em;
             }
 
             .button-container {
                 display: flex;
-                flex-direction: column; /* Stack buttons vertically */
+                flex-direction: column;
                 align-items: center;
             }
 
             button {
-                width: 100%; /* Make buttons full-width */
-                margin: 10px 0; /* Adjust margin for vertical stacking */
+                width: 100%;
+                margin: 10px 0;
             }
         }
     </style>
 </head>
 <body>
-    <div class="circle circle-1"></div>
-    <div class="circle circle-2"></div>
     <div class="container">
-        <h1>Vocabulary Quiz</h1>
+        <h1>TOEFL Visualizer</h1>
+        <hr>
         <input type="file" id="fileInput" accept=".txt">
         <label class="randomize-container">
             <input type="checkbox" id="randomizeCheckbox">
@@ -194,11 +180,18 @@
             <button id="showMeaningButton" disabled>Show Meaning</button>
             <button id="stopButton" disabled>Stop</button>
         </div>
+        <hr>
+        <div class="footer">
+            <div>Attempted: <span id="attemptedCount">0</span></div>
+            <div>Solved: <span id="correctCount">0</span></div>
+        </div>
     </div>
 
     <script>
         let wordList = [];
         let currentIndex = 0;
+        let attemptedCount = 0;
+        let correctCount = 0;
 
         document.getElementById('fileInput').addEventListener('change', function(event) {
             const file = event.target.files[0];
@@ -225,7 +218,7 @@
         document.getElementById('randomizeCheckbox').addEventListener('change', function() {
             if (this.checked && wordList.length > 0) {
                 wordList = shuffleArray(wordList);
-                this.disabled = true; // Disable the checkbox after shuffling
+                this.disabled = true;
             }
         });
 
@@ -234,6 +227,7 @@
         document.getElementById('showMeaningButton').addEventListener('click', function() {
             if (currentIndex > 0) {
                 document.getElementById('meaning').innerText = wordList[currentIndex - 1].meaning;
+                updateStats(false);
             }
         });
 
@@ -246,9 +240,17 @@
                 document.getElementById('word').innerText = wordList[currentIndex].word;
                 document.getElementById('meaning').innerText = '';
                 currentIndex++;
+                updateStats(true);
             } else {
                 alert("You have reached the end of the list!");
             }
+        }
+
+        function updateStats(correct) {
+            attemptedCount++;
+            if (correct) correctCount++;
+            document.getElementById('attemptedCount').innerText = attemptedCount;
+            document.getElementById('correctCount').innerText = attemptedCount - correctCount;
         }
 
         function shuffleArray(array) {
