@@ -19,8 +19,6 @@
             background-size: cover;
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
-            opacity: 0;
-            animation: fadeIn 1s forwards;
         }
 
         .container {
@@ -37,18 +35,50 @@
             text-align: center;
             overflow: auto;
             z-index: 1;
-            opacity: 0;
-            animation: fadeIn 1s 0.5s forwards;
         }
 
-        h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 16px; /* Reduced size */
-            font-weight: 300;
-            color: #ffffff;
+        .button-container {
+        display: none; /* Hide buttons initially */
+        }
+
+        /* Style for the glowing circle */
+        .glowing-circle {
+            position: fixed; /* Fixed position to keep it at the bottom middle */
+            bottom: 20px; /* Distance from the bottom of the viewport */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Center horizontally by translating */
+            width: 8px; /* Diameter of the circle */
+            height: 8px; /* Diameter of the circle */
+            background-color: #4395ff; /* Neon green color */
+            border-radius: 50%; /* Make it a circle */
+            
+            z-index: 2; /* Make sure it's on top */
+        }
+
+
+        .note-tab {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 15px;
+        padding: 15px;
+        margin-bottom: 15px;
+        font-family: 'Space Mono', monospace;
+        color: #b0b0b0;
+        text-align: center; /* Center align text */
+        font-size: 0.9em;
+        position: relative; /* Ensure correct positioning */
+        }
+    
+
+        .note-tab strong {
+            color: #a5c4ff; /* Different color for the "Note" text */
+        }
+
+        .container img {
+            width: 150px; /* Adjust as needed */
+            height: auto;
             margin-bottom: 10px;
-            opacity: 0;
-            animation: fadeIn 1s 0.5s forwards;
+            filter: invert(200%) sepia(100%) saturate(100%) hue-rotate(180deg); /* White color effect */
         }
 
         hr {
@@ -67,8 +97,14 @@
             font-size: 14px; /* Reduced size */
             display: block;
             margin: 0 auto;
-            opacity: 0;
-            animation: fadeIn 1s 0.75s forwards;
+        }
+
+        .randomize-container,
+        .button-container,
+        #word,
+        #meaning,
+        #example {
+            display: none; /* Initially hidden */
         }
 
         .randomize-container {
@@ -76,8 +112,6 @@
             align-items: center;
             justify-content: center;
             margin: 15px 0;
-            opacity: 0;
-            animation: fadeIn 1s 1s forwards;
         }
 
         .randomize-container input[type="checkbox"] {
@@ -89,36 +123,43 @@
             color: #b0b0b0; /* Grey text */
         }
 
-        #word, #meaning {
+        #word {
             margin: 15px 0;
             padding: 8px;
-            border-radius: 5px;
-            transition: background 0.3s, border 0.3s;
-        }
-
-        #word {
+            border-radius: 10px;
             background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.3);
             font-size: 1.5em; /* Adjusted size */
-            opacity: 0;
-            animation: fadeIn 1s 1.25s forwards;
         }
 
         #meaning {
+            margin: 15px 0;
+            padding: 8px;
+            border-radius: 10px;
             background: rgba(255, 255, 255, 0.1); /* Lighter background */
             border: 1px solid rgba(255, 255, 255, 0.2);
             font-size: 1.2em; /* Smaller font size */
             color: #b0b0b0; /* Grey color */
-            opacity: 0;
-            height: 0;
-            overflow: hidden;
-            transition: height 0.5s ease, opacity 0.5s ease;
+            display: none; /* Initially hidden */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        #example {
+            margin: 15px 0;
+            padding: 8px;
+            font-size: 1.2em; /* Matching font size */
+            color: #d0d0d0; /* Lighter grey color */
+            display: none; /* Initially hidden */
+            font-family: 'Space Mono', monospace; /* Use Space Mono font */
+            text-align: left; /* Left-align text */
+            animation: fadeIn 0.5s ease-in-out;
         }
 
         .button-container {
             margin-top: 15px;
-            opacity: 0;
-            animation: fadeIn 1s 1.75s forwards;
+            display: flex;
+            justify-content: center; /* Center align buttons */
+            gap: 10px; /* Space between buttons */
         }
 
         button {
@@ -155,32 +196,42 @@
             margin-top: 15px;
             font-size: 12px; /* Reduced size */
             color: #b0b0b0; /* Grey text */
-            opacity: 0;
-            animation: fadeIn 1s 2s forwards;
         }
 
+        /* Apple-like animation for showing meaning */
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: scale(0.95);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: scale(1);
             }
         }
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                height: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                height: auto;
-                transform: translateY(0);
-            }
+        @keyframes moveLeftRight {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(5px); } /* Reduced movement to avoid shaking */
+        }
+
+        /* Typing effect for example text */
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #b0b0b0; }
+        }
+
+        .typing-effect {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid #b0b0b0; /* Cursor effect */
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
         }
 
         @media (max-width: 768px) {
@@ -198,10 +249,12 @@
                 font-size: 1em;
             }
 
+            #example {
+                font-size: 1em;
+            }
+
             .button-container {
-                display: flex;
                 flex-direction: column;
-                align-items: center;
             }
 
             button {
@@ -213,7 +266,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>TOEFL Visualizer</h1>
+        
+        <img src="toefl.svg" alt="TOEFL Visualizer">
         <hr>
         <input type="file" id="fileInput" accept=".txt">
         <label class="randomize-container">
@@ -222,102 +276,125 @@
         </label>
         <div id="word"></div>
         <div id="meaning"></div>
+        <div id="example" class="example-container"></div> <!-- Added example box with animation -->
         <div class="button-container">
             <button id="nextButton" disabled>Next</button>
             <button id="showMeaningButton" disabled>Show Meaning</button>
             <button id="stopButton" disabled>Stop</button>
         </div>
+        <br>
+        <div id="noteTab" class="note-tab">
+            <strong>Note:</strong> Upload text file format : word ; meaning ; example
+        </div>
         <hr>
         <div class="footer">
-            <div>Attempted : <span id="attemptedCount">0</span></div>
-            <div>Skipped : <span id="correctCount">0</span></div>
+            <span id="attemptedQuestions">Questions Attempted: 0</span>
+            <span id="correctQuestions">Correct Answers: 0</span>
         </div>
+        <!-- <div class="glowing-circle"></div> -->
     </div>
-
+    
     <script>
         let wordList = [];
         let currentIndex = 0;
-        let attemptedCount = 0;
-        let correctCount = 0;
+        let randomized = false;
 
-        document.getElementById('fileInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    wordList = e.target.result.trim().split('\n').map(line => {
-                        const [word, meaning] = line.split(':');
-                        return { word: word.trim(), meaning: meaning.trim() };
-                    });
-                    if (wordList.length === 0) {
-                        alert("No words found in the file.");
-                    } else {
-                        document.getElementById('fileInput').style.display = 'none'; // Hide file input
-                        document.getElementById('nextButton').disabled = false;
-                        document.getElementById('showMeaningButton').disabled = false;
-                        document.getElementById('stopButton').disabled = false;
-                        displayNextWord();
-                    }
-                };
-                reader.readAsText(file);
+        const fileInput = document.getElementById('fileInput');
+        const nextButton = document.getElementById('nextButton');
+        const showMeaningButton = document.getElementById('showMeaningButton');
+        const stopButton = document.getElementById('stopButton');
+        const wordElement = document.getElementById('word');
+        const meaningElement = document.getElementById('meaning');
+        const exampleElement = document.getElementById('example');
+        const noteTab = document.getElementById('noteTab');
+        const randomizeCheckbox = document.getElementById('randomizeCheckbox');
+        const attemptedQuestionsElement = document.getElementById('attemptedQuestions');
+        const correctQuestionsElement = document.getElementById('correctQuestions');
+
+        fileInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const content = e.target.result;
+            wordList = content.trim().split('\n').map(line => {
+                const [word, meaning, example] = line.split(';');
+                return { word: word.trim(), meaning: meaning.trim(), example: example ? example.trim() : '' };
+            });
+
+            if (randomizeCheckbox.checked) {
+                wordList = wordList.sort(() => Math.random() - 0.5);
+                randomized = true;
             }
+
+            noteTab.style.display = 'none'; // Hide note tab after file upload
+            wordElement.style.display = 'block';
+            showMeaningButton.disabled = false;
+            nextButton.disabled = false;
+            stopButton.disabled = false;
+            randomizeCheckbox.style.display = 'none'; // Hide checkbox after file upload
+            document.querySelector('.button-container').style.display = 'flex'; // Show buttons
+            fileInput.style.display = 'none'; // Hide file input box after upload
+            displayNextWord();
+        };
+        reader.readAsText(file);
+    }
+});
+
+
+
+        nextButton.addEventListener('click', function() {
+            displayNextWord();
         });
 
-        document.getElementById('randomizeCheckbox').addEventListener('change', function() {
-            if (this.checked && wordList.length > 0) {
-                wordList = shuffleArray(wordList);
-                this.disabled = true;
-            }
-        });
-
-        document.getElementById('nextButton').addEventListener('click', displayNextWord);
-
-        document.getElementById('showMeaningButton').addEventListener('click', function() {
+        showMeaningButton.addEventListener('click', function() {
             if (currentIndex > 0) {
-                const meaningElement = document.getElementById('meaning');
-                meaningElement.innerText = wordList[currentIndex - 1].meaning;
-                meaningElement.style.opacity = '0';
-                meaningElement.style.height = 'auto';
-                meaningElement.offsetHeight; // Trigger reflow
-                meaningElement.style.transition = 'none';
-                meaningElement.style.animation = 'slideDown 0.5s forwards';
+                const wordItem = wordList[currentIndex - 1];
+                meaningElement.innerText = wordItem.meaning;
+                meaningElement.style.display = wordItem.meaning ? 'block' : 'none';
+                exampleElement.innerHTML = ''; // Clear previous example text
+                exampleElement.style.display = wordItem.example ? 'block' : 'none';
+
+                if (wordItem.example) {
+                    // Typing effect
+                    const exampleText = wordItem.example;
+                    let index = 0;
+                    exampleElement.innerHTML = ''; // Clear previous example
+                    const typingEffect = setInterval(() => {
+                        exampleElement.innerHTML += exampleText[index];
+                        index++;
+                        if (index === exampleText.length) {
+                            clearInterval(typingEffect);
+                        }
+                    }, 50); // Adjust typing speed here
+                }
+
                 updateStats(false);
             }
         });
 
-        document.getElementById('stopButton').addEventListener('click', function() {
-            alert("You have stopped the quiz.");
+        stopButton.addEventListener('click', function() {
+            // Implement stop functionality if needed
         });
 
         function displayNextWord() {
             if (currentIndex < wordList.length) {
-                document.getElementById('word').innerText = wordList[currentIndex].word;
-                document.getElementById('meaning').innerText = '';
-                document.getElementById('meaning').style.transition = 'none';
-                document.getElementById('meaning').style.opacity = '0';
-                document.getElementById('meaning').style.height = '0';
-                document.getElementById('meaning').offsetHeight; // Trigger reflow
-                document.getElementById('meaning').style.transition = 'height 0.5s ease, opacity 0.5s ease';
+                wordElement.innerText = wordList[currentIndex].word;
+                meaningElement.innerText = ''; // Clear previous meaning
+                exampleElement.innerHTML = ''; // Clear previous example
                 currentIndex++;
+                nextButton.disabled = currentIndex >= wordList.length;
+                showMeaningButton.disabled = currentIndex === 0;
                 updateStats(true);
-            } else {
-                alert("You have reached the end of the list!");
             }
         }
 
-        function updateStats(correct) {
-            attemptedCount++;
-            if (correct) correctCount++;
-            document.getElementById('attemptedCount').innerText = attemptedCount;
-            document.getElementById('correctCount').innerText = attemptedCount - correctCount;
-        }
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+        function updateStats(attempt) {
+            if (attempt) {
+                const attempted = parseInt(attemptedQuestionsElement.textContent.split(': ')[1]);
+                attemptedQuestionsElement.textContent = `Questions Attempted: ${attempted + 1}`;
             }
-            return array;
+            // Implement correctAnswers logic if needed
         }
     </script>
 </body>
