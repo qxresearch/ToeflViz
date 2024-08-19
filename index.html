@@ -15,10 +15,17 @@
             font-size: 12px;
             height: 100vh;
             margin: 0;
-            background: #1b1b1b url('background.jpg') no-repeat center center;
+            background: #1b1b1b url('blur1.jpg') no-repeat center center;
             background-size: cover;
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
+        }
+
+
+        .cont {
+            position: relative;
+            width: 430px;
+            max-height: 90vh;
         }
 
         .container {
@@ -264,10 +271,24 @@
         }
     </style>
 </head>
+
+
 <body>
+    
+    <div class="cont">
+
+        <div class="container">
+        
+            <img src="toefl.svg" alt="TOEFL Visualizer">
+            <hr>
+        </div>
+
+        <br>
+    
+
     <div class="container">
         
-        <img src="toefl.svg" alt="TOEFL Visualizer">
+        <!-- <img src="toefl.svg" alt="TOEFL Visualizer"> -->
         <hr>
         <input type="file" id="fileInput" accept=".txt">
         <label class="randomize-container">
@@ -292,8 +313,28 @@
             <span id="correctQuestions">Correct Answers: 0</span>
         </div>
         <!-- <div class="glowing-circle"></div> -->
+
+        </div>
+
+        <br>
+
+        <div class="container">
+            <div id="noteTab" class="note-tab">
+                <a href="https://testready.ets.org/other-resources"><strong>(A) </strong></a>
+                <a href="https://www.ets.org/toefl/institutions/ibt/about/content-structure.html#accordion-1c49b2eb62-item-8a52b15774"><strong>(B) |</strong></a>
+                &nbsp;
+                <a href="https://liuxue.koolearn.com/toefl/"><strong>Reading</strong></a>
+                &nbsp;&nbsp;
+                <a href="https://liuxue.koolearn.com/toefl/"><strong>Listening</strong></a>
+                &nbsp;&nbsp;
+                <a href="https://liuxue.koolearn.com/toefl/"><strong>Speaking</strong></a>
+                &nbsp;&nbsp;
+                <a href="https://liuxue.koolearn.com/toefl/"><strong>Writing</strong></a>
+            </div>
+        </div>
     </div>
-    
+
+
     <script>
         let wordList = [];
         let currentIndex = 0;
@@ -397,5 +438,7 @@
             // Implement correctAnswers logic if needed
         }
     </script>
+
+    
 </body>
 </html>
