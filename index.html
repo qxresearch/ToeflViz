@@ -1,536 +1,445 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Schedule!</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="3.ico">
-    <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash!</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="3.ico">
+<style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            height: 100vh;
+            margin: 0;
+            background: #1b1b1b url('blur1.jpg') no-repeat center center;
+            background-size: cover;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
 
 
-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  font-size: 12px;
-  min-height: 100vh;
-  margin: 0;
-  padding-top: 20px;
-  background: #303030 url('blur1.jpg') no-repeat center top;
-  background-size: cover;
-  font-family: 'Poppins', sans-serif;
-  overflow-x: hidden;
-  }
+        .cont {
+            position: relative;
+            width: 430px;
+            max-height: 90vh;
+        }
 
-  .instructor-info-container {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 200px; /* Adjust as needed */
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 0px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  color: rgb(120, 120, 120);
-  text-align: center;
-  z-index: 2;
- }
+        .container {
+            position: relative;
+            width: 420px;
+            max-height: 80vh;
+            background: rgba(33, 33, 33, 0.9); /* Darker ash color */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            color: white;
+            text-align: center;
+            overflow: auto;
+            z-index: 1;
+        }
 
- .instructor-info-container img {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 10px;
- }
+        .button-container {
+        display: none; /* Hide buttons initially */
+        }
 
- .instructor-info-container p {
-  margin-bottom: 0;
-  text-align: center;
- }
-
- /* Homework Container (Top Right) */
- .homework-container {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 150px; /* Adjust as needed */
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  color: rgb(255, 0, 0);
-  text-align: center;
-  z-index: 2;
- }
-
- .homework-container h3 {
-  margin-top: 0;
- }
-
- /* Mobile View Adjustments - Hide if screen width is small */
- @media (max-width: 650px) { /* Adjust breakpoint as needed */
-  .instructor-info-container,
-  .homework-container {
-  display: none;
-  }
- }
+        /* Style for the glowing circle */
+        .glowing-circle {
+            position: fixed; /* Fixed position to keep it at the bottom middle */
+            bottom: 20px; /* Distance from the bottom of the viewport */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Center horizontally by translating */
+            width: 8px; /* Diameter of the circle */
+            height: 8px; /* Diameter of the circle */
+            background-color: #4395ff; /* Neon green color */
+            border-radius: 50%; /* Make it a circle */
+            
+            z-index: 2; /* Make sure it's on top */
+        }
 
 
-  .user-info {
-  margin: 20px 0;
-  width: 420px;
- }
+        .note-tab {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 15px;
+        padding: 15px;
+        margin-bottom: 15px;
+        font-family: 'Space Mono', monospace;
+        color: #b0b0b0;
+        text-align: center; /* Center align text */
+        font-size: 0.9em;
+        position: relative; /* Ensure correct positioning */
+        }
+    
 
-  .links-outer-container {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
- }
+        .note-tab strong {
+            color: #a5c4ff; /* Different color for the "Note" text */
+        }
 
-  .links-container {
-  flex: 1;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  padding: 15px;
- }
+        .container img {
+            width: 150px; /* Adjust as needed */
+            height: auto;
+            margin-bottom: 10px;
+            filter: invert(200%) sepia(100%) saturate(100%) hue-rotate(180deg); /* White color effect */
+        }
 
-  .container {
-  position: relative;
-  width: 420px;
-  max-height: 80vh;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 15px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  color: rgb(0, 0, 0);
-  text-align: center;
-  overflow: hidden;
-  z-index: 1;
-  margin-bottom: 10px;
-  box-sizing: border-box;
- }
+        hr {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.2); /* Subtle grey line */
+            margin-bottom: 10px;
+        }
 
- .contshad{
-  position: relative;
-  width: 420px;
-  max-height: 80vh;
-  /* backdrop-filter: blur(5px); */
-  /* background-color: rgb(0, 0, 0); */
-  border: 2px solid rgba(175, 175, 175, 0.2);
-  border-radius: 15px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  color: rgb(0, 0, 0);
-  text-align: center;
-  overflow: hidden;
-  z-index: 1;
-  margin-bottom: 10px;
-  box-sizing: border-box;
+        input[type="file"] {
+            margin-bottom: 15px;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            background: #444444; /* Subtle background */
+            color: #b0b0b0; /* Subtle text */
+            font-size: 14px; /* Reduced size */
+            display: block;
+            margin: 0 auto;
+        }
 
- }
+        .randomize-container,
+        .button-container,
+        #word,
+        #meaning,
+        #example {
+            display: none; /* Initially hidden */
+        }
 
-  .schedule-container {
-  width: 420px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 15px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  color: rgb(34, 34, 34);
-  /* margin-top: 20px; */
-  /* margin-bottom: 20px; */
-  text-align: left;
- }
+        .randomize-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+        }
 
-  .paragraph {
-  color: rgb(110, 110, 110);
-  text-align: center;
- }
+        .randomize-container input[type="checkbox"] {
+            margin-right: 8px;
+        }
 
-  .link-title {
-  font-size: 1.1em;
-  margin-bottom: 5px;
- }
+        .randomize-container span {
+            font-size: 14px;
+            color: #b0b0b0; /* Grey text */
+        }
 
-  a {
-  font-size: 1em;
-  color: #6a9eff;
-  text-decoration: none;
- }
+        #word {
+            margin: 15px 0;
+            padding: 8px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 1.5em; /* Adjusted size */
+        }
 
-  a:hover {
-  color: lightgrey;
- }
+        #meaning {
+            margin: 15px 0;
+            padding: 8px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1); /* Lighter background */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 1.2em; /* Smaller font size */
+            color: #b0b0b0; /* Grey color */
+            display: none; /* Initially hidden */
+            animation: fadeIn 0.5s ease-in-out;
+        }
 
-  a:visited {
-  color:  #8a37ff;;
- }
+        #example {
+            margin: 15px 0;
+            padding: 8px;
+            font-size: 1.2em; /* Matching font size */
+            color: #d0d0d0; /* Lighter grey color */
+            display: none; /* Initially hidden */
+            font-family: 'Space Mono', monospace; /* Use Space Mono font */
+            text-align: left; /* Left-align text */
+            animation: fadeIn 0.5s ease-in-out;
+        }
 
-  .schedule-container h3 {
-  text-align: center;
-  margin-bottom: 10px;
- }
+        .button-container {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center; /* Center align buttons */
+            gap: 10px; /* Space between buttons */
+        }
 
-  .schedule-table {
-  width: 100%;
-  border-collapse: collapse;
-  
- }
+        button {
+            background-color: #3498db;
+            color: white;
+            font-size: 14px; /* Reduced size */
+            padding: 8px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
 
-  .schedule-table th,
-  .schedule-table td {
-  padding: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  text-align: left;
-  text-align: center;
- }
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
 
-  .schedule-table th {
-  font-weight: bold;
-  text-align: center;
- }
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
 
-  .schedule-table tr:last-child td {
-  border-bottom: none;
- }
+        button:disabled:hover {
+            background-color: #95a5a6;
+            transform: none;
+        }
 
-  /* Mobile View Adjustments */
-  @media (max-width: 600px) {
-  .instructor-info-container,
-  .homework-container {
-  display: none; /* Hide on smaller screens */
-  }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            font-size: 12px; /* Reduced size */
+            color: #b0b0b0; /* Grey text */
+        }
 
-  /* Option 2: Move to the end of the page on mobile */
-  /*
-  .instructor-info-container,
-  .homework-container {
-  position: relative; !* Remove absolute positioning *!
-  top: auto;
-  left: auto;
-  right: auto;
-  margin: 20px auto; !* Center and add margin *!
-  width: 90%; !* Take up more width on mobile *!
-  }
-  */
-  }
+        /* Apple-like animation for showing meaning */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+}
+        }
 
+        @keyframes moveLeftRight {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(5px); } /* Reduced movement to avoid shaking */
+        }
 
+        /* Typing effect for example text */
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #b0b0b0; }
+        }
+
+        .typing-effect {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid #b0b0b0; /* Cursor effect */
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                max-height: none;
+                height: auto;
+}
+
+            #word {
+                font-size: 1.2em;
+            }
+
+            #meaning {
+                font-size: 1em;
+            }
+
+            #example {
+                font-size: 1em;
+            }
+
+            .button-container {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+                margin: 10px 0;
+            }
+}
     </style>
 </head>
+
+
 <body>
-<!--   
-  <div class="instructor-info-container">
-    <img src="kk.png" alt="Instructor Photo">
-        <p> <code>rohitmandal814566@gmail.com</code> </p>     
-  </div>
+    
+    <div class="cont">
 
-  
-   -->
-  
-
-    <div id="user-info">
-
-        <div class="container links-outer-container">
-            <div id="class-link-container" class="contshad">
-                <h3 class="link-title">Class Links</h3>
-                <p><a id="class-link" href="#" target="_blank">GoogleMeet</a></p>
-            </div>
-            <div id="notes-link-container" class="contshad">
-                <h3 class="link-title">Notes</h3>
-                <p><a id="notes-link" href="#" target="_blank">GoodNotes</a></p>
-            </div>
+        <div class="container">
+        
+            <img src="toefl.svg" alt="TOEFL Visualizer">
+            <hr>
         </div>
 
-        <div class="container links-outer-container">
-            <div id="next-class-container" class="contshad">
-                <h3>Next Class</h3>
-                <p><span id="next-class-day"></span> at <span id="next-class-time"></span></p>
-            </div>
+        <br>
+    
 
-            <div id="time-remaining-container" class="contshad">
-                <h3>Time Remaining</h3>
-                <p class="countdown"><span id="days"></span>d <span id="hours"></span>h <span id="minutes"></span>m <span id="seconds"></span>s</p>
-            </div>
+    <div class="container">
+        
+        <!-- <img src="toefl.svg" alt="TOEFL Visualizer"> -->
+        <hr>
+        <input type="file" id="fileInput" accept=".txt">
+        <label class="randomize-container">
+            <input type="checkbox" id="randomizeCheckbox">
+            <span>Randomize words</span>
+        </label>
+        <div id="word"></div>
+        <div id="meaning"></div>
+        <div id="example" class="example-container"></div> <!-- Added example box with animation -->
+        <div class="button-container">
+            <button id="nextButton" disabled>Next</button>
+            <button id="showMeaningButton" disabled>Show Meaning</button>
+            <button id="stopButton" disabled>Stop</button>
+        </div>
+        <br>
+        <div id="noteTab" class="note-tab">
+            <strong>Note:</strong> Upload text file format : word ; meaning ; example
+        </div>
+        <hr>
+        <div class="footer">
+            <span id="attemptedQuestions">Questions Attempted: 0</span>
+            <span id="correctQuestions">Correct Answers: 0</span>
+        </div>
+        <!-- <div class="glowing-circle"></div> -->
+
         </div>
 
-        <div id="user-not-found" class="container" style="display: none;">
-            <p>User not found or invalid email parameter.</p>
+        <br>
+
+        <div class="container">
+            <div id="noteTab" class="note-tab">
+                <a href="https://testready.ets.org/other-resources"><strong>(A) </strong></a>
+                <a href="https://www.ets.org/toefl/institutions/ibt/about/content-structure.html#accordion-1c49b2eb62-item-8a52b15774"><strong>(B) |</strong></a>
+                &nbsp;
+                <a href="https://liuxue.koolearn.com/toefl/"><strong>Reading</strong></a>
+                &nbsp;&nbsp;
+                <a href="https://liuxue.koolearn.com/toefl/"><strong>Listening</strong></a>
+                &nbsp;&nbsp;
+                <a href="https://liuxue.koolearn.com/toefl/"><strong>Speaking</strong></a>
+                &nbsp;&nbsp;
+                <a href="https://liuxue.koolearn.com/toefl/"><strong>Writing</strong></a>
+            </div>
         </div>
     </div>
 
-    <div id="schedule-display" class="container schedule-container" style="display: none;">
-        <h3>Your Weekly Schedule (Local Time)</h3>
-        <div id="weekly-schedule">
-            <table class="schedule-table">
-                <thead>
-                    <tr>
-                        <th>Day</th>
-                        <th>Time</th>
-                    </tr>
-                </thead>
-                <tbody id="schedule-body">
-                    </tbody>
-            </table>
-        </div>   
-    </div>
 
-    <div class="container"> rohitmandal814566@gmail.com</div>
+    <script>
+        let wordList = [];
+        let currentIndex = 0;
+        let randomized = false;
 
+        const fileInput = document.getElementById('fileInput');
+        const nextButton = document.getElementById('nextButton');
+        const showMeaningButton = document.getElementById('showMeaningButton');
+        const stopButton = document.getElementById('stopButton');
+        const wordElement = document.getElementById('word');
+        const meaningElement = document.getElementById('meaning');
+        const exampleElement = document.getElementById('example');
+        const noteTab = document.getElementById('noteTab');
+        const randomizeCheckbox = document.getElementById('randomizeCheckbox');
+        const attemptedQuestionsElement = document.getElementById('attemptedQuestions');
+        const correctQuestionsElement = document.getElementById('correctQuestions');
 
+        fileInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const content = e.target.result;
+            wordList = content.trim().split('\n').map(line => {
+                const [word, meaning, example] = line.split(';');
+                return { word: word.trim(), meaning: meaning.trim(), example: example ? example.trim() : '' };
+            });
 
+            if (randomizeCheckbox.checked) {
+                wordList = wordList.sort(() => Math.random() - 0.5);
+                randomized = true;
+}
 
-
-
-
-
-
-
-
-
-
-   <script>
-        // Schedule data stored in UTC
-        const schedule = {
-            "alvina": {
-                classLink: "https://meet.google.com/xdz-xaob-rdk",
-                notesLink: "https://share.goodnotes.com/s/vqohuFAlaY5veLJBnno7ri",
-                weeklyScheduleUTC: [
-                    { day: "Monday", time: "08:30" },
-                    { day: "Tuesday", time: "08:30" },
-                    { day: "Wednesday", time: "08:30" },
-                    { day: "Wednesday", time: "08:30" }
-                ]
-            },
-            "noah": {
-                classLink: "https://meet.google.com/xdz-xaob-rdk",
-                notesLink: "https://share.goodnotes.com/s/vNOc9PcD0tjjHPh0mX4mj0",
-                weeklyScheduleUTC: [
-                    { day: "Monday", time: "17:00" },
-                    { day: "Saturday", time: "17:00" }
-                ]
-            },
-            "eza": {
-                classLink: "https://meet.google.com/xdz-xaob-rdk",
-                notesLink: "https://share.goodnotes.com/s/nJJajqlCWm5j67RTF3M8H5",
-                weeklyScheduleUTC: [
-                    { day: "Wednesday", time: "15:00" },
-                    { day: "Saturday", time: "16:00" }
-                ]
-            },
-            "mariana": {
-                classLink: "https://meet.google.com/xdz-xaob-rdk",
-                notesLink: "https://share.goodnotes.com/s/9DDo4h7apdA8UwlznhlmcA",
-                weeklyScheduleUTC: [
-                    { day: "Thursday", time: "17:00" },
-                    { day: "Saturday", time: "09:00" }
-                ]
-            },
-            "rohitmandal814566@gmail.com": {
-                classLink: "https://meet.google.com/your-class-link",
-                notesLink: "https://share.goodnotes.com/your-notes-link",
-                weeklyScheduleUTC: [
-                    { day: "Thursday", time: "17:00" }, // Thursday 5:00 PM UTC
-                    { day: "Saturday", time: "09:00" }  // Saturday 9:00 AM UTC
-                ]
-            }
+            noteTab.style.display = 'none'; // Hide note tab after file upload
+            wordElement.style.display = 'block';
+            showMeaningButton.disabled = false;
+            nextButton.disabled = false;
+            stopButton.disabled = false;
+            randomizeCheckbox.style.display = 'none'; // Hide checkbox after file upload
+            document.querySelector('.button-container').style.display = 'flex'; // Show buttons
+            fileInput.style.display = 'none'; // Hide file input box after upload
+            displayNextWord();
         };
+        reader.readAsText(file);
+    }
+});
 
-        // Function to calculate time remaining until the next class (based on UTC schedule)
-        function calculateTimeRemaining(schedule) {
-            const nowLocal = new Date();
-            const viewerTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-            let closestClassTimeUTC = null;
-            let closestClassSchedule = null;
 
-            for (const classSchedule of schedule.weeklyScheduleUTC) {
-                const classDay = classSchedule.day;
-                const classTime = classSchedule.time;
+        nextButton.addEventListener('click', function() {
+            displayNextWord();
+        });
 
-                const nextClassUTC = getNextClassDateTimeUTC(classDay, classTime, nowLocal); // Pass nowLocal
+        showMeaningButton.addEventListener('click', function() {
+            if (currentIndex > 0) {
+                const wordItem = wordList[currentIndex - 1];
+                meaningElement.innerText = wordItem.meaning;
+                meaningElement.style.display = wordItem.meaning ? 'block' : 'none';
+                exampleElement.innerHTML = ''; // Clear previous example text
+                exampleElement.style.display = wordItem.example ? 'block' : 'none';
 
-                if (nextClassUTC > nowLocal.getTime()) {
-                    if (!closestClassTimeUTC || nextClassUTC < closestClassTimeUTC) {
-                        closestClassTimeUTC = nextClassUTC;
-                        closestClassSchedule = classSchedule;
-                    }
-                }
-            }
-
-            if (!closestClassSchedule) return null;
-
-            const timeDiff = closestClassTimeUTC - nowLocal.getTime(); // Difference between future UTC and current local
-            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-
-            // Convert the next class UTC time to the viewer's local time for display
-            const closestClassTimeViewerLocal = new Date(closestClassTimeUTC);
-
-            return { days, hours, minutes, seconds, closestClassSchedule, closestClassTimeViewerLocal };
-        }
-
-        // Function to get the next class UTC timestamp
-        function getNextClassDateTimeUTC(day, time, nowLocal) {
-            const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            const targetDayIndex = dayNames.indexOf(day);
-            const currentDayIndexUTC = nowLocal.getUTCDay(); // Use getUTCDay for UTC day
-
-            let daysUntilClass = targetDayIndex - currentDayIndexUTC;
-            if (daysUntilClass < 0) {
-                daysUntilClass += 7;
-            } else if (daysUntilClass === 0) {
-                const [hours, minutes] = time.split(':').map(Number);
-                const currentUTCHours = nowLocal.getUTCHours();
-                const currentUTCMinutes = nowLocal.getUTCMinutes();
-
-                if (hours < currentUTCHours || (hours === currentUTCHours && minutes <= currentUTCMinutes)) {
-                    daysUntilClass += 7;
-                }
-            }
-
-            const nextClassUTCDate = new Date(Date.UTC(
-                nowLocal.getUTCFullYear(),
-                nowLocal.getUTCMonth(),
-                nowLocal.getUTCDate() + daysUntilClass,
-                parseInt(time.split(':')[0], 10),
-                parseInt(time.split(':')[1], 10),
-                0,
-                0
-            ));
-
-            return nextClassUTCDate.getTime();
-        }
-
-        // Function to display countdown and update every second
-        function updateCountdownForUser(email, userSchedule) {
-            const userInfoDiv = document.getElementById("user-info");
-            const scheduleDisplayDiv = document.getElementById("schedule-display");
-            const scheduleBody = document.getElementById("schedule-body");
-
-            const linksOuterContainer = document.createElement("div");
-            linksOuterContainer.classList.add("container", "links-outer-container");
-            const classLinkContainer = document.createElement("div");
-            classLinkContainer.classList.add("contshad");
-            const notesLinkContainer = document.createElement("div");
-            notesLinkContainer.classList.add("contshad");
-            const nextClassContainer = document.createElement("div");
-            nextClassContainer.classList.add("contshad");
-            const timeRemainingContainer = document.createElement("div");
-            timeRemainingContainer.classList.add("contshad");
-
-            function refreshCountdown() {
-                const timeRemainingData = calculateTimeRemaining(userSchedule);
-
-                linksOuterContainer.innerHTML = '';
-                classLinkContainer.innerHTML = '';
-                notesLinkContainer.innerHTML = '';
-                nextClassContainer.innerHTML = '';
-                timeRemainingContainer.innerHTML = '';
-
-                if (timeRemainingData) {
-                    const { days, hours, minutes, seconds, closestClassSchedule, closestClassTimeViewerLocal } = timeRemainingData;
-
-                    classLinkContainer.innerHTML = `
-                        <h3 class="link-title">Class Links</h3>
-                        <p><a href="${userSchedule.classLink}" target="_blank">Join Class</a></p>
-                    `;
-
-                    notesLinkContainer.innerHTML = `
-                        <h3 class="link-title">Notes</h3>
-                        <p><a href="${userSchedule.notesLink}" target="_blank">View Notes</a></p>
-                    `;
-
-                    linksOuterContainer.appendChild(classLinkContainer);
-                    linksOuterContainer.appendChild(notesLinkContainer);
-
-                    // Format the next class time in the viewer's local timezone
-                    const nextClassDayLocal = closestClassTimeViewerLocal.toLocaleDateString('en-US', { weekday: 'long' });
-                    const nextClassTimeLocal = closestClassTimeViewerLocal.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-
-                    nextClassContainer.innerHTML = `
-                        <h3>Next Class</h3>
-                        <p><span id="next-class-day">${nextClassDayLocal}</span> at <span id="next-class-time">${nextClassTimeLocal}</span></p>
-                    `;
-
-                    timeRemainingContainer.innerHTML = `
-                        <h3>Time Remaining</h3>
-                        <p class="countdown"><span id="days">${days}</span>d <span id="hours">${hours}</span>h <span id="minutes">${minutes}</span>m <span id="seconds">${seconds}</span>s</p>
-                    `;
-
-                    const totalSecondsRemaining = (days * 24 * 3600) + (hours * 3600) + (minutes * 60) + seconds;
-
-                    // Removed the auto-open logic as per your request in previous turn.
-
-                } else {
-                    nextClassContainer.innerHTML = `<h3>Next Class</h3><p>No upcoming class found.</p>`;
+                if (wordItem.example) {
+                    // Typing effect
+                    const exampleText = wordItem.example;
+                    let index = 0;
+                    exampleElement.innerHTML = ''; // Clear previous example
+                    const typingEffect = setInterval(() => {
+                        exampleElement.innerHTML += exampleText[index];
+                        index++;
+                        if (index === exampleText.length) {
+                            clearInterval(typingEffect);
+                        }
+                    }, 50); // Adjust typing speed here
                 }
 
-                userInfoDiv.innerHTML = '';
-                userInfoDiv.appendChild(linksOuterContainer);
-                userInfoDiv.appendChild(nextClassContainer);
-                userInfoDiv.appendChild(timeRemainingContainer);
-
-                // Update the schedule display
-                scheduleDisplayDiv.style.display = 'block';
-                scheduleBody.innerHTML = ''; // Clear previous schedule
-
-                const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-                const nowLocal = new Date();
-                const currentDayIndexLocal = nowLocal.getDay(); // Get local day index (0-6)
-
-                userSchedule.weeklyScheduleUTC.forEach(item => {
-                    const row = scheduleBody.insertRow();
-                    const dayCell = row.insertCell();
-                    const timeCell = row.insertCell();
-
-                    const targetDayIndexUTC = dayNames.indexOf(item.day);
-
-                    // Calculate the date of the next occurrence of this class in UTC
-                    const [hoursUTC, minutesUTC] = item.time.split(':').map(Number);
-                    const nextClassUTCDate = new Date(Date.UTC(
-                        nowLocal.getUTCFullYear(),
-                        nowLocal.getUTCMonth(),
-                        nowLocal.getUTCDate() + (targetDayIndexUTC - nowLocal.getUTCDay() + 7) % 7,
-                        hoursUTC,
-                        minutesUTC,
-                        0,
-                        0
-                    ));
-
-                    // Convert UTC time to local time for display
-                    const localDay = nextClassUTCDate.toLocaleDateString('en-US', { weekday: 'long' });
-                    const localTime = nextClassUTCDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-
-                    dayCell.textContent = localDay;
-                    timeCell.textContent = localTime;
-                });
+                updateStats(false);
             }
+        });
 
-            refreshCountdown();
-            setInterval(refreshCountdown, 1000);
-        }
+        stopButton.addEventListener('click', function() {
+            // Implement stop functionality if needed
+        });
 
-        function getEmailFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('email');
-        }
+        function displayNextWord() {
+            if (currentIndex < wordList.length) {
+                wordElement.innerText = wordList[currentIndex].word;
+                meaningElement.innerText = ''; // Clear previous meaning
+                exampleElement.innerHTML = ''; // Clear previous example
+                currentIndex++;
+                nextButton.disabled = currentIndex >= wordList.length;
+                showMeaningButton.disabled = currentIndex === 0;
+                updateStats(true);
+            }
+}
 
-        const email = getEmailFromURL();
-        if (email && schedule[email]) {
-            updateCountdownForUser(email, schedule[email]);
-        } else {
-            document.getElementById("user-info").style.display = 'none';
-            document.getElementById("schedule-display").style.display = 'none';
-            document.getElementById("user-not-found").style.display = 'block';
-        }
-    </script>
+        function updateStats(attempt) {
+            if (attempt) {
+                const attempted = parseInt(attemptedQuestionsElement.textContent.split(': ')[1]);
+                attemptedQuestionsElement.textContent = `Questions Attempted: ${attempted + 1}`;
+            }
+            // Implement correctAnswers logic if needed
+}
+</script>
 
+    
 </body>
 </html>
